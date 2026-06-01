@@ -1,6 +1,7 @@
 use std::collections::HashMap;
 
 use ruint::aliases::U256;
+use serde::{Deserialize, Serialize};
 use thiserror::Error;
 use tracing::info;
 
@@ -18,7 +19,7 @@ use crate::{
 
 // TODO: Consider making me into an enum with two variants on a generic Inner, so
 // the values can be [_; 3] / [_; 13] instead of Vec<_> with padding.
-#[derive(Debug)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PoiCircuitInputs {
     // Public Inputs
     /// The pre-inclusion Merkle root of the txid
@@ -27,12 +28,12 @@ pub struct PoiCircuitInputs {
     /// `poi_client::merkle_proofs`. A seperate padded version is
     /// kept for circuit inputs.
     pub poi_merkleroots: Vec<MerkleRoot>,
-    poi_merkleroots_padded: Vec<MerkleRoot>,
+    pub poi_merkleroots_padded: Vec<MerkleRoot>,
 
     // Private inputs
 
     // Railgun Transaction info
-    bound_params_hash: U256,
+    pub bound_params_hash: U256,
 
     //? Public so the prover can calculate input / output sizes for circuit
     //? selection. Not actual public circuit inputs.
@@ -40,29 +41,29 @@ pub struct PoiCircuitInputs {
     pub commitments: Vec<U256>,
 
     // Spender wallet info
-    spending_public_key: [U256; 2],
-    nullifying_key: U256,
+    pub spending_public_key: [U256; 2],
+    pub nullifying_key: U256,
 
     // Nullified notes data
-    token: U256,
-    randoms_in: Vec<U256>,
-    values_in: Vec<U256>,
-    utxo_positions_in: Vec<U256>,
-    utxo_tree_in: U256,
+    pub token: U256,
+    pub randoms_in: Vec<U256>,
+    pub values_in: Vec<U256>,
+    pub utxo_positions_in: Vec<U256>,
+    pub utxo_tree_in: U256,
 
     // Commitment notes data
-    npks_out: Vec<U256>,
-    values_out: Vec<U256>,
-    utxo_batch_global_start_position_out: U256,
+    pub npks_out: Vec<U256>,
+    pub values_out: Vec<U256>,
+    pub utxo_batch_global_start_position_out: U256,
 
     // Unshield data
     pub railgun_txid_if_has_unshield: Txid,
-    railgun_txid_merkle_proof_indices: U256,
-    railgun_txid_merkle_proof_path_elements: Vec<U256>,
+    pub railgun_txid_merkle_proof_indices: U256,
+    pub railgun_txid_merkle_proof_path_elements: Vec<U256>,
 
     // POI tree
-    poi_in_merkle_proof_indices: Vec<U256>,
-    poi_in_merkle_proof_path_elements: Vec<Vec<U256>>,
+    pub poi_in_merkle_proof_indices: Vec<U256>,
+    pub poi_in_merkle_proof_path_elements: Vec<Vec<U256>>,
 }
 
 #[derive(Debug, Error)]

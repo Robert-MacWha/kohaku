@@ -93,8 +93,12 @@ railgun = { path = ".", features = ["testing"] }
 serial_test = { workspace = true }
 tokio = { workspace = true, features = ["full"] }
 tracing-test = { workspace = true }
-criterion = { workspace = true }
+criterion = { workspace = true, features = ["async_tokio"] }
 
 [[bench]]
 name = "indexed_account"
+harness = false
+
+[[bench]]
+name = "prove"
 harness = false

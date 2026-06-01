@@ -78,7 +78,7 @@ impl RemoteArtifactLoader {
         Self {
             base_url: base_url.trim_end_matches('/').to_string(),
             client: reqwest::Client::new(),
-            cache: Arc::new(Mutex::new(Cache::new(64 * 1024 * 1024))),
+            cache: Arc::new(Mutex::new(Cache::new(128 * 1024 * 1024))),
         }
     }
 
@@ -119,8 +119,10 @@ impl RemoteArtifactLoader {
 
     async fn fetch(&self, url: &str) -> Result<Vec<u8>, reqwest::Error> {
         if let Some(cached) = self.cache.lock().unwrap().get(url) {
+            info!("Cache hit: {}", url);
             return Ok(cached);
         }
+        info!("Fetching: {}", url);
         let data = self.client.get(url).send().await?.bytes().await?.to_vec();
         self.cache
             .lock()

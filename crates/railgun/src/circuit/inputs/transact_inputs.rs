@@ -2,6 +2,7 @@ use std::{collections::HashMap, sync::Arc};
 
 use crypto::poseidon_hash;
 use ruint::aliases::U256;
+use serde::{Deserialize, Serialize};
 use thiserror::Error;
 
 use crate::{
@@ -12,7 +13,7 @@ use crate::{
     note::{Note, utxo::UtxoNote},
 };
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct TransactCircuitInputs {
     // Public Inputs
     pub merkleroot: MerkleRoot,
@@ -21,16 +22,16 @@ pub struct TransactCircuitInputs {
     pub commitments_out: Vec<U256>,
 
     // Private Inputs
-    token: U256,
-    public_key: [U256; 2],
-    signature: [U256; 3],
-    random_in: Vec<U256>,
-    value_in: Vec<U256>,
-    path_elements: Vec<Vec<U256>>,
-    leaves_indices: Vec<U256>,
-    nullifying_key: U256,
-    npk_out: Vec<U256>,
-    value_out: Vec<U256>,
+    pub token: U256,
+    pub public_key: [U256; 2],
+    pub signature: [U256; 3],
+    pub random_in: Vec<U256>,
+    pub value_in: Vec<U256>,
+    pub path_elements: Vec<Vec<U256>>,
+    pub leaves_indices: Vec<U256>,
+    pub nullifying_key: U256,
+    pub npk_out: Vec<U256>,
+    pub value_out: Vec<U256>,
 }
 
 #[derive(Debug, Error)]
